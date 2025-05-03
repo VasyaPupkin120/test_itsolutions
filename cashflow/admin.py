@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Category, StatusFlow, TypeFlow, CashFlow 
+
+admin.site.register(Category)
+admin.site.register(StatusFlow)
+admin.site.register(TypeFlow)
+admin.site.register(CashFlow)
