@@ -17,6 +17,11 @@ Including another URLconf
 from django.urls import path
 from . import views
 
+app_name = 'cashflow'
+
 urlpatterns = [
-    path('', views.main_page, name="main_page"),
+    # path('', views.listflow, name="home"),
+    path('', views.CashflowList.as_view(), name="cashflowlist"),
+    path('createflow/', views.createflow, name="createflow"),
+    path('refrencedata/', views.refrence_data, name="refrence_data"),
 ]
