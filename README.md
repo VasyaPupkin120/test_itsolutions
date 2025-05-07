@@ -20,3 +20,6 @@
 
     test
     test
+
+Скриншот главной странички:
+![Главная](screenshots/main.png)
