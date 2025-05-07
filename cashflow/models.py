@@ -74,10 +74,11 @@ class CashFlow(models.Model):
             raise ValidationError({'subcategory': f"Подкатегория {self.subcategory.name} не принадлежит категории {self.category.name}"})
 
     def save(self, *args, **kwargs):
-        # для запуска валидации в любом случае
-        self.full_clean()
         # для автозаполнения времени создания + сохранения возможности редактирования
         if not self.pk:
             self.created_at = timezone.now()
+
+        # для запуска валидации в любом случае
+        self.full_clean()
         super().save(*args, **kwargs)
 

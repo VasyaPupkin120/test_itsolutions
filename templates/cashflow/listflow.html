@@ -5,16 +5,19 @@
 {% block page_title %}Движения денежных средств{% endblock %}
 
 {% block content %}
-    <form id="filter-form" method="GET">
-        <!-- Начальное и конечное время -->
+    <h3>Фильтр движений</h3>
+    <hr>
+    <form id="filter-form-list-flow" method="GET">
+        {% csrf_token %}
+        <!-- Начальные и конечные даты -->
         <div class="form-group">
-            <label for="start_datetime">Начальная дата/время</label>
-            <input type="datetime-local" id="start_datetime" name="start_datetime" class="form-control">
+            <label for="start_date">Начальная дата</label>
+            <input type="date" id="start_date" name="start_date" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="end_datetime">Конечная дата/время</label>
-            <input type="datetime-local" id="end_datetime" name="end_datetime" class="form-control">
+            <label for="end_date">Конечная дата</label>
+            <input type="date" id="end_date" name="end_date" class="form-control">
         </div>
 
         <!-- Тип операции -->
@@ -76,7 +79,7 @@
             <tbody>
                 {% for flow in object_list %}
                     <tr>
-                        <td><a href="#% url '#' flow.pk %}" class="btn btn-sm btn-link text-primary" title="Редактировать">✎ </a></td>
+                        <td><a href="{% url 'cashflow:updateflow' flow.pk %}" class="btn btn-sm btn-link text-primary" title="Редактировать">✎ </a></td>
                         <td>{{ flow.created_at|date:"d.m.Y" }}</td>
                         <td>{{ flow.amount }} ₽</td>
                         <td>{{ flow.typeflow.name }}</td>
@@ -84,7 +87,8 @@
                         <td>{{ flow.subcategory.name }}</td>
                         <td>{{ flow.status.name }}</td>
                         <td>{{ flow.comment }}</td>
-                        <td><a href="#% url '#' flow.pk %}" class="btn btn-sm btn-link text-primary" title="Удалить">🗑</a></td>
+
+                        <td><a href="{% url 'cashflow:deleteflow' flow.pk %}" class="btn btn-sm btn-link text-primary" title="Удалить">🗑</a></td>
                     </tr>
                 {% empty %}
                     <tr>
@@ -101,66 +105,5 @@
     <br>
 
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Данные из контеста
-    const filterData = JSON.parse('{{ filter_data|escapejs }}');
-
-    // Элементы формы
-    const typeflowSelect = document.getElementById('typeflow');
-    const categorySelect = document.getElementById('category');
-    const subcategorySelect = document.getElementById('subcategory');
-    const statusSelect = document.getElementById('status');
-
-    // Заполняем статичные поля
-    fillSelect(typeflowSelect, filterData.typeflows);
-    fillSelect(statusSelect, filterData.statuses);
-
-    // Обработчик изменения типа
-    typeflowSelect.addEventListener('change', function() {
-        const selectedType = this.value;
-        
-        // Сбрасываем и блокируем зависимые поля
-        categorySelect.innerHTML = '<option value="">Выберите категорию</option>';
-        subcategorySelect.innerHTML = '<option value="">Сначала выберите категорию</option>';
-        subcategorySelect.disabled = true;
-        
-        if (selectedType) {
-            // Получаем категории для выбранного типа
-            const allowedCategories = filterData.typeflows_and_categories[selectedType];
-            fillSelect(categorySelect, allowedCategories);
-            categorySelect.disabled = allowedCategories.length === 0;
-        } else {
-            categorySelect.disabled = true;
-        }
-    });
-
-    // Обработчик изменения категории
-    categorySelect.addEventListener('change', function() {
-        const selectedCategory = this.value;
-        subcategorySelect.innerHTML = '<option value="">Выберите подкатегорию</option>';
-        
-        if (selectedCategory) {
-            const allowedSubcategories = filterData.categories_and_subcategories[selectedCategory] || [];
-            fillSelect(subcategorySelect, allowedSubcategories);
-            subcategorySelect.disabled = allowedSubcategories.length === 0;
-        } else {
-            subcategorySelect.disabled = true;
-        }
-    });
-
-    // Вспомогательная функция для заполнения select
-    function fillSelect(selectElement, options) {
-        options.forEach(option => {
-            const opt = document.createElement('option');
-            opt.value = option;
-            opt.textContent = option;
-            selectElement.appendChild(opt);
-        });
-    }
-});
-
-
-</script>
 
 {% endblock %}
