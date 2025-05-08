@@ -26,9 +26,22 @@ urlpatterns = [
     path('flow-delete/<int:pk>/', views.CashFlowDeleteView.as_view(), name="flow-delete"),
 
     path('refrences/', views.refrence_data, name="refrence-list"),
-    path('refrence-create/', views.refrence_data, name="refrence-create"),
-    path('refrence-update/', views.refrence_data, name="refrence-update"),
-    path('refrence-delete/', views.refrence_data, name="refrence-delete"),
+
+    path('refrence-create/typeflow/', views.RefrenceTypeflowCreateView.as_view(), name="refrence-typeflow-create"),
+    path('refrence-update/typeflow/<int:pk>/', views.refrence_data, name="refrence-typeflow-update"),
+    path('refrence-delete/typeflow/<int:pk>/', views.refrence_data, name="refrence-typeflow-delete"),
+
+    path('refrence-create/category/', views.RefrenceCategoryCreateView.as_view(), name="refrence-category-create"),
+    path('refrence-update/category/<int:pk>/', views.refrence_data, name="refrence-category-update"),
+    path('refrence-delete/category/<int:pk>/', views.refrence_data, name="refrence-category-delete"),
+
+    path('refrence-create/subcategory/', views.RefrenceSubcategoryCreateView.as_view(), name="refrence-subcategory-create"),
+    path('refrence-update/subcategory/<int:pk>/', views.refrence_data, name="refrence-subcategory-update"),
+    path('refrence-delete/subcategory/<int:pk>/', views.refrence_data, name="refrence-subcategory-delete"),
+
+    path('refrence-create/statusflow/', views.RefrenceStatusflowCreateView.as_view(), name="refrence-statusflow-create"),
+    path('refrence-update/statusflow/<int:pk>/', views.refrence_data, name="refrence-statusflow-update"),
+    path('refrence-delete/statusflow/<int:pk>/', views.refrence_data, name="refrence-statusflow-delete"),
 
     path('api/structure-data/', views.ajax_get_structure_data, name="api-structure-data")
 ]

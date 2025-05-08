@@ -33,7 +33,7 @@
             </table>
         </div>
         <button type="submit" class="btn btn-primary">Фильтровать</button>
-        <a href="{{ success_url }}" class="btn btn-secondary ml-2">Отменить все фильтры</a>
+        <a href="{% url 'cashflow:flow-list' %}" class="btn btn-secondary ml-2">Отменить все фильтры</a>
     </form>
 
     <br>

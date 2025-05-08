@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 
 from .models import CashFlow, Category, StatusFlow, Subcategory, TypeFlow, StatusFlow
-from .forms import CreateUpdateCashFlowForm, FilterCashFlowForm
+from .forms import CategoryCreateUpdateForm, CreateUpdateCashFlowForm, FilterCashFlowForm, StatusflowCreateUpdateForm, SubcategoryCreateUpdateForm, TypeflowCreateUpdateForm
 
 
 def ajax_get_structure_data(request):
@@ -109,4 +109,33 @@ def refrence_data(request):
                }
     return render(request, 'cashflow/refrence_list.html', context)
 
+class RefrenceTypeflowCreateView(CreateView):
+    model = TypeFlow
+    form_class = TypeflowCreateUpdateForm
+    template_name = 'cashflow/refrence_typeflow_create.html'
+    success_url = reverse_lazy("cashflow:refrence-list")
+    context_object_name = 'typeflow'
 
+
+class RefrenceCategoryCreateView(CreateView):
+    model = Category
+    form_class = CategoryCreateUpdateForm
+    template_name = 'cashflow/refrence_category_create.html'
+    success_url = reverse_lazy("cashflow:refrence-list")
+    context_object_name = 'category'
+
+
+class RefrenceSubcategoryCreateView(CreateView):
+    model = Subcategory
+    form_class = SubcategoryCreateUpdateForm
+    template_name = 'cashflow/refrence_subcategory_create.html'
+    success_url = reverse_lazy("cashflow:refrence-list")
+    context_object_name = 'subcategory'
+
+
+class RefrenceStatusflowCreateView(CreateView):
+    model = StatusFlow
+    form_class = StatusflowCreateUpdateForm
+    template_name = 'cashflow/refrence_statusflow_create.html'
+    success_url = reverse_lazy("cashflow:refrence-list")
+    context_object_name = 'statusflow'

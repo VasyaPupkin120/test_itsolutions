@@ -13,22 +13,26 @@
     {% for typeflow in typeflows %}
         <h5>{{ typeflow.name }}</h5>
     {% endfor %}
+    <a href="{% url 'cashflow:refrence-typeflow-create'%}" class="btn btn-primary">Добавить тип</a>
     <br>
     <hr>
     <h2>Категории</h2>
     {% for category in categories %}
         <h5>{{ category.name }}</h5>
     {% endfor %}
+    <a href="{% url 'cashflow:refrence-category-create'%}" class="btn btn-primary">Добавить категорию</a>
     <br>
     <hr>
     <h2>Подкатегории</h2>
     {% for subcategory in subcategories %}
         <h5>{{ subcategory.name }}</h5>
     {% endfor %}
+    <a href="{% url 'cashflow:refrence-subcategory-create'%}" class="btn btn-primary">Добавить подкатегорию</a>
     <br>
     <hr>
     <h2>Статусы</h2>
     {% for status in statuses %}
         <h5>{{ status.name }}</h5>
     {% endfor %}
+    <a href="{% url 'cashflow:refrence-statusflow-create'%}" class="btn btn-primary">Добавить статус</a>
 {% endblock %}

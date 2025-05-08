@@ -4,8 +4,22 @@ from .models import CashFlow, TypeFlow, Category, Subcategory, StatusFlow
 
 class CreateUpdateCashFlowForm(forms.ModelForm):
     """
-    Форма для редактирования записи ДДС
+    Форма для создания и редактирования записи ДДС
     """
+    created_at = forms.DateField(
+        # вынужден указать здесь поле и параметр required чтобы браузер не требовал его заполнения
+        required=False,
+        label='Дата движения',
+        widget=forms.DateInput(
+            attrs={
+                'class': 'form-control',
+                'type': 'date',
+                'id': 'created_at',
+                'label': 'Дата создания'
+            },
+            format='%d.%m.%Y'
+        )
+    )
     class Meta:
         model = CashFlow
         fields = ['amount', 'created_at', 'typeflow', 'category', 'subcategory', 'status', 'comment']
@@ -17,13 +31,14 @@ class CreateUpdateCashFlowForm(forms.ModelForm):
                 'id': 'amount',
                 'required': True
             }),
-            'created_at': forms.DateInput(attrs={
-                'class': 'form-control',
-                'type': 'date',
-                'id': 'created_at',
-                'required': True,
-                'format': '%d.%m.%Y'
-            }),
+            # перекрыто объявлением поля в основном классе формы
+            # 'created_at': forms.DateInput(attrs={
+            #     'class': 'form-control',
+            #     'type': 'date',
+            #     'id': 'created_at',
+            #     'format': '%d.%m.%Y',
+            #     'required': False
+            # }),
             'typeflow': forms.Select(attrs={
                 'class': 'form-control',
                 'id': 'typeflow',
@@ -52,7 +67,7 @@ class CreateUpdateCashFlowForm(forms.ModelForm):
         }
         labels = {
             'amount': 'Сумма (руб)',
-            'created_at': 'Дата движения',
+            # 'created_at': 'Дата движения',
             'typeflow': 'Тип',
             'category': 'Категория',
             'subcategory': 'Подкатегория',
@@ -151,3 +166,26 @@ class FilterCashFlowForm(forms.Form):
         self.fields['subcategory'].empty_label = "Подкатегория"
         self.fields['status'].empty_label = "Статус"
         
+
+class TypeflowCreateUpdateForm(forms.ModelForm):
+    class Meta:
+        model = TypeFlow
+        fields = ['name',]
+
+
+class CategoryCreateUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name', 'typeflow']
+    
+
+class SubcategoryCreateUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Subcategory
+        fields = ['name', 'supercategory']
+
+
+class StatusflowCreateUpdateForm(forms.ModelForm):
+    class Meta:
+        model = StatusFlow
+        fields = ['name', ]

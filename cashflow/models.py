@@ -61,7 +61,7 @@ class CashFlow(models.Model):
     class Meta:
         verbose_name = "Движение средств"
         verbose_name_plural = "Движения средств"
-        ordering = ["-created_at"]
+        ordering = ["-created_at", "amount"]
 
     def __str__(self):
         return str(self.amount)
