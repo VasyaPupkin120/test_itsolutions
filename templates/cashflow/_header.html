@@ -1,15 +1,15 @@
 <header class="bg-dark text-white mb-4">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-dark">
-            <a class="navbar-brand" href="{% url 'cashflow:cashflowlist' %}">Список движений</a>
+            <a class="navbar-brand" href="{% url 'cashflow:flow-list' %}">Список движений</a>
             
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cashflow:createflow' %}">Создать движение</a>
+                        <a class="nav-link" href="{% url 'cashflow:flow-create' %}">Создать движение</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cashflow:refrence_data' %}">Справочники</a>
+                        <a class="nav-link" href="{% url 'cashflow:refrence-list' %}">Справочники</a>
                     </li>
                 </ul>
                 

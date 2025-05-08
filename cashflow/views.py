@@ -44,13 +44,12 @@ def ajax_get_structure_data(request):
 
 
 
-def refrence_data(request):
-    return render(request, 'cashflow/refrence_data.html')
-
-
 class CashflowListView(ListView):
+    """
+    Список движений.
+    """
     model = CashFlow
-    template_name = "cashflow/listflow.html"
+    template_name = "cashflow/flow_list.html"
 
     def get_queryset(self):
         filters = Q()
@@ -75,67 +74,30 @@ class CashflowListView(ListView):
         return context
 
 
-def createflow(request: HttpRequest):
-    if request.method == 'POST':
-        try:
-            typeflow_name = request.POST.get('typeflow')
-            category_name = request.POST.get('category')
-            subcategory_name = request.POST.get('subcategory')
-            status_name = request.POST.get('status')
-            amount = request.POST.get('amount')
-            comment = request.POST.get('comment', '').strip()
-            
-            if not all([typeflow_name, category_name, subcategory_name, status_name, amount]):
-                messages.error(request, "Все обязательные поля должны быть заполнены")
-                return redirect('createflow')
-            
-            typeflow = TypeFlow.objects.get(name=typeflow_name)
-            category = Category.objects.get(name=category_name, typeflow=typeflow)
-            subcategory = Subcategory.objects.get(name=subcategory_name, supercategory=category)
-            status = StatusFlow.objects.get(name=status_name)
-            
-            cashflow = CashFlow(
-                amount=amount,
-                comment=comment if comment else "---",
-                typeflow=typeflow,
-                category=category,
-                subcategory=subcategory,
-                status=status
-            )
-            
-            cashflow.save()
-            
-            messages.success(request, "Запись о движении средств успешно создана")
-            return redirect('cashflow:cashflowlist')
-
-        except ObjectDoesNotExist as e:
-            messages.error(request, f"Ошибка: {str(e)}")
-        except ValueError as e:
-            messages.error(request, f"Ошибка в данных: {str(e)}")
-        except Exception as e:
-            messages.error(request, f"Произошла ошибка: {str(e)}")
-    return render(request, 'cashflow/createflow.html')
-
-
-
 class CashFlowCreateView(CreateView):
     model = CashFlow
     form_class = CreateUpdateCashFlowForm
-    template_name = 'cashflow/createflow.html'
-    success_url = reverse_lazy('cashflow:cashflowlist')
+    template_name = 'cashflow/flow_create.html'
+    success_url = reverse_lazy('cashflow:flow-list')
     context_object_name = 'flow'
 
 
 class CashFlowUpdateView(UpdateView):
     model = CashFlow
     form_class = CreateUpdateCashFlowForm
-    template_name = 'cashflow/updateflow.html'
-    success_url = reverse_lazy('cashflow:cashflowlist')
+    template_name = 'cashflow/flow_update.html'
+    success_url = reverse_lazy('cashflow:flow-list')
     context_object_name = 'flow'
 
 
 class CashFlowDeleteView(DeleteView):
     model = CashFlow
-    template_name = 'cashflow/confirm_deletecashflow.html'
-    success_url = reverse_lazy('cashflow:cashflowlist')
+    template_name = 'cashflow/flow_confirm_delete.html'
+    success_url = reverse_lazy('cashflow:flow-list')
     context_object_name = 'flow'
+
+
+def refrence_data(request):
+    return render(request, 'cashflow/refrence_list.html')
+
+

@@ -58,7 +58,7 @@
             <tbody>
                 {% for flow in object_list %}
                     <tr>
-                        <td><a href="{% url 'cashflow:updateflow' flow.pk %}" class="btn btn-sm btn-link text-primary" title="Редактировать">✎ </a></td>
+                        <td><a href="{% url 'cashflow:flow-update' flow.pk %}" class="btn btn-sm btn-link text-primary" title="Редактировать">✎ </a></td>
                         <td>{{ flow.created_at|date:"d.m.Y" }}</td>
                         <td>{{ flow.amount }} ₽</td>
                         <td>{{ flow.typeflow.name }}</td>
@@ -67,7 +67,7 @@
                         <td>{{ flow.status.name }}</td>
                         <td>{{ flow.comment }}</td>
 
-                        <td><a href="{% url 'cashflow:deleteflow' flow.pk %}" class="btn btn-sm btn-link text-primary" title="Удалить">🗑</a></td>
+                        <td><a href="{% url 'cashflow:flow-delete' flow.pk %}" class="btn btn-sm btn-link text-primary" title="Удалить">🗑</a></td>
                     </tr>
                 {% empty %}
                     <tr>
