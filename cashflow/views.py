@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.http import HttpRequest, JsonResponse
-from django.db.models import Q
+from django.db.models import Q, Subquery
 from django.http import JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.exceptions import ObjectDoesNotExist
@@ -98,6 +98,15 @@ class CashFlowDeleteView(DeleteView):
 
 
 def refrence_data(request):
-    return render(request, 'cashflow/refrence_list.html')
+    typeflows = TypeFlow.objects.all()
+    categories = Category.objects.all()
+    subcategories = Subcategory.objects.all()
+    statuses = StatusFlow.objects.all()
+    context = {"typeflows": typeflows,
+               "categories": categories,
+               "subcategories": subcategories,
+               "statuses": statuses,
+               }
+    return render(request, 'cashflow/refrence_list.html', context)
 
 

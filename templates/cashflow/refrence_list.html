@@ -8,4 +8,27 @@
     <div class="alert alert-info">
         <p>Списки справочников и ссылки на странички создания этих справочников</p>
     </div>
+    <hr>
+    <h2>Типы движений</h2>
+    {% for typeflow in typeflows %}
+        <h5>{{ typeflow.name }}</h5>
+    {% endfor %}
+    <br>
+    <hr>
+    <h2>Категории</h2>
+    {% for category in categories %}
+        <h5>{{ category.name }}</h5>
+    {% endfor %}
+    <br>
+    <hr>
+    <h2>Подкатегории</h2>
+    {% for subcategory in subcategories %}
+        <h5>{{ subcategory.name }}</h5>
+    {% endfor %}
+    <br>
+    <hr>
+    <h2>Статусы</h2>
+    {% for status in statuses %}
+        <h5>{{ status.name }}</h5>
+    {% endfor %}
 {% endblock %}
