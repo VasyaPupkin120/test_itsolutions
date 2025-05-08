@@ -9,24 +9,24 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 
 from .models import CashFlow, Category, StatusFlow, Subcategory, TypeFlow, StatusFlow
-from .forms import CashFlowForm
+from .forms import UpdateCashFlowForm
 
 def ajax_get_structure_data(request):
     """
     ajax-запрос структуры типов, категорий, подкатегорий, статусов
     """
-    typeflows = list(TypeFlow.objects.values_list("name", flat=True))
-    categories = list(Category.objects.values_list("name", flat=True))
-    subcategories = list(Subcategory.objects.values_list("name", flat=True))
-    statuses = list(StatusFlow.objects.values_list("name", flat=True))
+    typeflows = dict(TypeFlow.objects.values_list('pk', "name"))
+    categories = dict(Category.objects.values_list('pk', "name"))
+    subcategories = dict(Subcategory.objects.values_list('pk', "name"))
+    statuses = dict(StatusFlow.objects.values_list('pk', "name"))
 
     typeflows_and_categories = {}
     for typeflow in TypeFlow.objects.all():
-        typeflows_and_categories[typeflow.name] = [category.name for category in typeflow.categories.all()]
+        typeflows_and_categories[typeflow.pk] = [category.pk for category in typeflow.categories.all()]
 
     categories_and_subcategories = {} 
     for category in Category.objects.all():
-        categories_and_subcategories[category.name] = [subcategory.name for subcategory in category.subcategories.all()]
+        categories_and_subcategories[category.pk] = [subcategory.pk for subcategory in category.subcategories.all()]
 
     filter_data = {}
     filter_data['typeflows'] = typeflows
@@ -36,7 +36,7 @@ def ajax_get_structure_data(request):
 
     filter_data['typeflows_and_categories'] = typeflows_and_categories
     filter_data['categories_and_subcategories'] = categories_and_subcategories
-    
+
     filter_data = JsonResponse(filter_data, encoder=DjangoJSONEncoder, safe=False)
     
     return filter_data
@@ -117,26 +117,33 @@ def createflow(request: HttpRequest):
 
 def updateflow(request:HttpRequest, pk):
     print(pk)
+    print(request.POST)
     return redirect('cashflow:cashflowlist')
 
 
 class CashFlowUpdateView(UpdateView):
     model = CashFlow
-    form_class = CashFlowForm
+    form_class = UpdateCashFlowForm
     template_name = 'cashflow/updateflow.html'
     success_url = reverse_lazy('cashflow:cashflowlist')
     context_object_name = 'flow'
-    
+
+    def post(self, request, *args, **kwargs):
+        print('\n', "POST response: ", request.POST, '\n')
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        print("Valid data:", form.cleaned_data)
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print("Invalid data:", form.data)
+        print("Errors:", form.errors)
+        return super().form_invalid(form)   
+
 
 class CashFlowDeleteView(DeleteView):
     model = CashFlow
     template_name = 'cashflow/confirm_deletecashflow.html'
     success_url = reverse_lazy('cashflow:cashflowlist')
     context_object_name = 'flow'
-
-    # def get_initial(self):
-    #     initial = super().get_initial()
-    #     initial['typeflow'] = self.object.typeflow.name
-    #     initial['category'] = self.object.category.name
-    #     initial['subcategory'] = self.object.subcategory.name
-    #     return initial
