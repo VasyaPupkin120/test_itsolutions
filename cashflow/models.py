@@ -76,7 +76,8 @@ class CashFlow(models.Model):
     def save(self, *args, **kwargs):
         # для автозаполнения времени создания + сохранения возможности редактирования
         if not self.pk:
-            self.created_at = timezone.now()
+            if not self.created_at:
+                self.created_at = timezone.now()
 
         # для запуска валидации в любом случае
         self.full_clean()

@@ -62,6 +62,92 @@ class CreateUpdateCashFlowForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Преобразуем дату в формат пригодный для чтения html, для красивого выбора даты
+        # Преобразуем дату в формат пригодный для чтения браузером, для красивого выбора даты
         if self.instance and self.instance.pk:
             self.initial['created_at'] = self.instance.created_at.strftime('%Y-%m-%d')
+
+
+
+class FilterCashFlowForm(forms.Form):
+    """
+    Форма для фильтрации списка ДДС.
+    """
+    start_date = forms.DateField(
+        label='Начальная дата',
+        required=False,
+        widget=forms.DateInput(
+            attrs={
+                'type': 'date',
+                'class': 'form-control',
+                'id': 'start_date'
+            },
+            format='%d.%m.%Y'
+        )
+    )
+    end_date = forms.DateField(
+        label='Конечная дата',
+        required=False,
+        widget=forms.DateInput(
+            attrs={
+                'type': 'date',
+                'class': 'form-control',
+                'id': 'end_date'
+            },
+            format='%d.%m.%Y'
+        )
+    )
+    typeflow = forms.ModelChoiceField(
+        label='Тип',
+        queryset=TypeFlow.objects.all(),
+        required=False,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'id': 'typeflow'
+            }
+        )
+    )
+    category = forms.ModelChoiceField(
+        label='Категория',
+        queryset=Category.objects.none(),
+        required=False,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'id': 'category',
+            }
+        )
+    )
+    
+    subcategory = forms.ModelChoiceField(
+        label='Подкатегория',
+        queryset=Subcategory.objects.none(),
+        required=False,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'id': 'subcategory',
+            }
+        )
+    )
+    status = forms.ModelChoiceField(
+        label='Статус',
+        queryset=StatusFlow.objects.all(),
+        required=False,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'id': 'status'
+            }
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Устанавливаем пустые значения по умолчанию
+        self.fields['typeflow'].empty_label = "Тип"
+        self.fields['category'].empty_label = "Категория"
+        self.fields['subcategory'].empty_label = "Подкатегория"
+        self.fields['status'].empty_label = "Статус"
+        

@@ -145,8 +145,8 @@ function fillSelect(selectElement, items) {
 
 
 
-// ======= Управление формой создания и редактирования записи =======
-async function controlFormCreateUpdateFlow(action) {
+// ======= Управление формой создания, редактирования записи и фильтрации списка ДДС =======
+async function controlFormCreateUpdateFilterFlow(action) {
     filterData = await getStructureData();
     
     // Элементы формы
@@ -189,12 +189,13 @@ async function controlFormCreateUpdateFlow(action) {
         }
 
 
-    if (action === "create") {
-        categorySelect.innerHTML = '<option value="">Сначала выберите тип</option>';
+    if (action === "create" || action === "filter") {
+        categorySelect.innerHTML = '<option value="">Выберите тип</option>';
         categorySelect.disabled = true; 
-        subcategorySelect.innerHTML = '<option value="">Сначала выберите категорию</option>';
+        subcategorySelect.innerHTML = '<option value="">Выберите категорию</option>';
         subcategorySelect.disabled = true;
     }
+
 
 
     // Обработчик изменения типа
@@ -202,7 +203,7 @@ async function controlFormCreateUpdateFlow(action) {
 
         // Сбрасываем категорию и подкатегорию
         categorySelect.innerHTML = '<option value="">Выберите категорию</option>';
-        subcategorySelect.innerHTML = '<option value="">Сначала выберите категорию</option>';
+        subcategorySelect.innerHTML = '<option value="">Выберите категорию</option>';
         subcategorySelect.disabled = true;
 
         if (this.value) {
@@ -252,14 +253,14 @@ async function controlFormCreateUpdateFlow(action) {
 document.addEventListener('DOMContentLoaded', function() {
     // Определяем текущую страницу
     if (document.getElementById('form-filter-list-flow')) {
-        fillDropdownLists();
+        controlFormCreateUpdateFilterFlow('filter');
     }
     if (document.getElementById('form-create-flow')) {
-        controlFormCreateUpdateFlow('create');
+        controlFormCreateUpdateFilterFlow('create');
     }
 
     if (document.getElementById('form-update-flow')) {
-        controlFormCreateUpdateFlow('update');
+        controlFormCreateUpdateFilterFlow('update');
     }
 
 });

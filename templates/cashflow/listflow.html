@@ -6,55 +6,34 @@
 
 {% block content %}
     <h3>Фильтр движений</h3>
-    <hr>
-    <form id="form-filter-list-flow" method="GET">
-        {% csrf_token %}
-        <!-- Начальные и конечные даты -->
-        <div class="form-group">
-            <label for="start_date">Начальная дата</label>
-            <input type="date" id="start_date" name="start_date" class="form-control">
-        </div>
 
-        <div class="form-group">
-            <label for="end_date">Конечная дата</label>
-            <input type="date" id="end_date" name="end_date" class="form-control">
+    <form id="form-filter-list-flow" method="GET" class="form-inline">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>{{ filter_form.start_date.label_tag }}</th>
+                        <th>{{ filter_form.end_date.label_tag }}</th>
+                        <th>{{ filter_form.typeflow.label_tag }}</th>
+                        <th>{{ filter_form.category.label_tag }}</th>
+                        <th>{{ filter_form.subcategory.label_tag }}</th>
+                        <th>{{ filter_form.status.label_tag }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ filter_form.start_date }}</td>
+                        <td>{{ filter_form.end_date }}</td>
+                        <td>{{ filter_form.typeflow }}</td>
+                        <td>{{ filter_form.category }}</td>
+                        <td>{{ filter_form.subcategory }}</td>
+                        <td>{{ filter_form.status }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
-        <!-- Тип операции -->
-        <div class="form-group">
-            <label for="typeflow">Тип</label>
-            <select id="typeflow" name="typeflow" class="form-control">
-                <option value="">Выберите тип</option>
-                <!-- Заполнится через JavaScript -->
-            </select>
-        </div>
-
-        <!-- Категория -->
-        <div class="form-group">
-            <label for="category">Категория</label>
-            <select id="category" name="category" class="form-control" disabled>
-                <option value="">Сначала выберите тип</option>
-            </select>
-        </div>
-
-        <!-- Подкатегория -->
-        <div class="form-group">
-            <label for="subcategory">Подкатегория</label>
-            <select id="subcategory" name="subcategory" class="form-control" disabled>
-                <option value="">Сначала выберите категорию</option>
-            </select>
-        </div>
-
-        <!-- Статус -->
-        <div class="form-group">
-            <label for="status">Статус</label>
-            <select id="status" name="status" class="form-control">
-                <option value="">Выберите статус</option>
-                <!-- Заполнится через JavaScript -->
-            </select>
-        </div>
-
         <button type="submit" class="btn btn-primary">Фильтровать</button>
+        <a href="{{ success_url }}" class="btn btn-secondary ml-2">Отменить все фильтры</a>
     </form>
 
     <br>

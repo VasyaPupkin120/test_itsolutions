@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 
 from .models import CashFlow, Category, StatusFlow, Subcategory, TypeFlow, StatusFlow
-from .forms import CreateUpdateCashFlowForm
+from .forms import CreateUpdateCashFlowForm, FilterCashFlowForm
 
 
 def ajax_get_structure_data(request):
@@ -59,18 +59,19 @@ class CashflowListView(ListView):
         if end_date := self.request.GET.get('end_date'):
             filters &= Q(created_at__lte=end_date)
         if typeflow := self.request.GET.get('typeflow'):
-            filters &= Q(typeflow__name=typeflow)
+            filters &= Q(typeflow=typeflow)
         if category := self.request.GET.get('category'):
-            filters &= Q(category__name=category)
+            filters &= Q(category=category)
         if subcategory := self.request.GET.get('subcategory'):
-            filters &= Q(subcategory__name=subcategory)
+            filters &= Q(subcategory=subcategory)
         if status := self.request.GET.get('status'):
-            filters &= Q(status__name=status)
+            filters &= Q(status=status)
 
         return CashFlow.objects.filter(filters)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["filter_form"] = FilterCashFlowForm
         return context
 
 
