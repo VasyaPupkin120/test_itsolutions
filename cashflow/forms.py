@@ -2,7 +2,7 @@ from django import forms
 from .models import CashFlow, TypeFlow, Category, Subcategory, StatusFlow
 
 
-class UpdateCashFlowForm(forms.ModelForm):
+class CreateUpdateCashFlowForm(forms.ModelForm):
     """
     Форма для редактирования записи ДДС
     """
@@ -17,11 +17,12 @@ class UpdateCashFlowForm(forms.ModelForm):
                 'id': 'amount',
                 'required': True
             }),
-            'created_at': forms.DateTimeInput(attrs={
+            'created_at': forms.DateInput(attrs={
                 'class': 'form-control',
-                'type': 'datetime-local',
+                'type': 'date',
                 'id': 'created_at',
                 'required': True,
+                'format': '%d.%m.%Y'
             }),
             'typeflow': forms.Select(attrs={
                 'class': 'form-control',
@@ -61,6 +62,6 @@ class UpdateCashFlowForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
-        # Преобразуем DateTime в формат для datetime-local
-        self.initial['created_at'] = self.instance.created_at.strftime('%Y-%m-%dT%H:%M')
+        # Преобразуем дату в формат пригодный для чтения html, для красивого выбора даты
+        if self.instance and self.instance.pk:
+            self.initial['created_at'] = self.instance.created_at.strftime('%Y-%m-%d')

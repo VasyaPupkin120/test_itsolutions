@@ -9,49 +9,10 @@
         <p>Форма ввода новых ДДС</p>
     </div>
 
-<form id="form-create-flow" method="POST">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="amount">Сумма (руб)</label>
-        <input type="number" id="amount" name="amount" class="form-control" step="0.01" min="0" required>
-    </div>
-
-    <div class="form-group">
-        <label for="typeflow">Тип</label>
-        <select id="typeflow" name="typeflow" class="form-control" required>
-            <option value="">Выберите тип</option>
-            <!-- Заполнится через JavaScript -->
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="category">Категория</label>
-        <select id="category" name="category" class="form-control" disabled required>
-            <option value="">Сначала выберите тип</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="subcategory">Подкатегория</label>
-        <select id="subcategory" name="subcategory" class="form-control" disabled required>
-            <option value="">Сначала выберите категорию</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="status">Статус</label>
-        <select id="status" name="status" class="form-control" required>
-            <option value="">Выберите статус</option>
-            <!-- Заполнится через JavaScript -->
-        </select>
-    </div>
-
-
-    <div class="form-group">
-        <label for="comment">Комментарий</label>
-        <textarea id="comment" name="comment" class="form-control" rows="2"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Создать запись</button>
-</form>
+    <form id="form-create-flow" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="{{ success_url }}" class="btn btn-secondary">Вернуть изменения</a>
+    </form>
 {% endblock %}

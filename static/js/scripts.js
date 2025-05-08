@@ -145,8 +145,8 @@ function fillSelect(selectElement, items) {
 
 
 
-// ======= Управление формой редактирования записи =======
-async function controlFormUpdateFlow() {
+// ======= Управление формой создания и редактирования записи =======
+async function controlFormCreateUpdateFlow(action) {
     filterData = await getStructureData();
     
     // Элементы формы
@@ -156,36 +156,45 @@ async function controlFormUpdateFlow() {
     const statusSelect = document.getElementById('status');
 
 
-    // Сохраняем значения полей при первой загрузке
-    const startTypeflow = typeflowSelect.value;
-    const startCategory = categorySelect.value;
-    const startSubcategory = subcategorySelect.value;
+    if (action === "update") {
+        // Сохраняем значения полей при первой загрузке
+        const startTypeflow = typeflowSelect.value;
+        const startCategory = categorySelect.value;
+        const startSubcategory = subcategorySelect.value;
+
+        // Ограничение списка категорий в выпадающем списке при загрузке странички
+        // Получаем разрешенные категории для текущего типа
+        const allowedCategoryIds = filterData.typeflows_and_categories[startTypeflow];
+        const allowedCategories = {};
+        allowedCategoryIds.forEach(id => {
+            allowedCategories[id] = filterData.categories[id];
+        });
+        // Заполняем категории, сохраняя текущее выбранное значение
+        fillSelect(categorySelect, allowedCategories);
+        // Восстанавливаем первоначальную категорию
+        categorySelect.value = startCategory;
+        
+
+        // Ограничение подкатегорий в выпадающем списке
+        // Получаем разрешенные подкатегории для текущей категории
+        const allowedSubcategoryIds = filterData.categories_and_subcategories[startCategory];
+        const allowedSubcategories = {};
+        allowedSubcategoryIds.forEach(id => {
+            allowedSubcategories[id] = filterData.subcategories[id];
+        });
+        // Заполняем подкатегории, сохраняя текущее выбранное значение
+        fillSelect(subcategorySelect, allowedSubcategories);
+        // Восстанавливаем первоначальную подкатегорию
+        subcategorySelect.value = startSubcategory;
+        }
 
 
-    // Ограничение списка категорий в выпадающем списке при загрузке странички
-    // Получаем разрешенные категории для текущего типа
-    const allowedCategoryIds = filterData.typeflows_and_categories[startTypeflow];
-    const allowedCategories = {};
-    allowedCategoryIds.forEach(id => {
-        allowedCategories[id] = filterData.categories[id];
-    });
-    // Заполняем категории, сохраняя текущее выбранное значение
-    fillSelect(categorySelect, allowedCategories);
-    // Восстанавливаем первоначальную категорию
-    categorySelect.value = startCategory;
-    
-
-    // Ограничение подкатегорий в выпадающем списке
-    // Получаем разрешенные подкатегории для текущей категории
-    const allowedSubcategoryIds = filterData.categories_and_subcategories[startCategory];
-    const allowedSubcategories = {};
-    allowedSubcategoryIds.forEach(id => {
-        allowedSubcategories[id] = filterData.subcategories[id];
-    });
-    // Заполняем подкатегории, сохраняя текущее выбранное значение
-    fillSelect(subcategorySelect, allowedSubcategories);
-    // Восстанавливаем первоначальную подкатегорию
-    subcategorySelect.value = startSubcategory;
+    if (action === "create") {
+        categorySelect.innerHTML = '<option value="">Сначала выберите тип</option>';
+        categorySelect.disabled = true; 
+        subcategorySelect.innerHTML = '<option value="">Сначала выберите категорию</option>';
+        subcategorySelect.disabled = true;
+    }
 
 
     // Обработчик изменения типа
@@ -238,6 +247,7 @@ async function controlFormUpdateFlow() {
 
 }
 
+
 // ======= Скрипты для соответсвующих страниц =======
 document.addEventListener('DOMContentLoaded', function() {
     // Определяем текущую страницу
@@ -245,11 +255,11 @@ document.addEventListener('DOMContentLoaded', function() {
         fillDropdownLists();
     }
     if (document.getElementById('form-create-flow')) {
-        fillDropdownLists();
+        controlFormCreateUpdateFlow('create');
     }
 
     if (document.getElementById('form-update-flow')) {
-        controlFormUpdateFlow();
+        controlFormCreateUpdateFlow('update');
     }
 
 });

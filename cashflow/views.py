@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DeleteView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.http import HttpRequest, JsonResponse
 from django.db.models import Q
 from django.http import JsonResponse
@@ -9,7 +9,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 
 from .models import CashFlow, Category, StatusFlow, Subcategory, TypeFlow, StatusFlow
-from .forms import UpdateCashFlowForm
+from .forms import CreateUpdateCashFlowForm
+
 
 def ajax_get_structure_data(request):
     """
@@ -115,31 +116,21 @@ def createflow(request: HttpRequest):
     return render(request, 'cashflow/createflow.html')
 
 
-def updateflow(request:HttpRequest, pk):
-    print(pk)
-    print(request.POST)
-    return redirect('cashflow:cashflowlist')
+
+class CashFlowCreateView(CreateView):
+    model = CashFlow
+    form_class = CreateUpdateCashFlowForm
+    template_name = 'cashflow/createflow.html'
+    success_url = reverse_lazy('cashflow:cashflowlist')
+    context_object_name = 'flow'
 
 
 class CashFlowUpdateView(UpdateView):
     model = CashFlow
-    form_class = UpdateCashFlowForm
+    form_class = CreateUpdateCashFlowForm
     template_name = 'cashflow/updateflow.html'
     success_url = reverse_lazy('cashflow:cashflowlist')
     context_object_name = 'flow'
-
-    def post(self, request, *args, **kwargs):
-        print('\n', "POST response: ", request.POST, '\n')
-        return super().post(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        print("Valid data:", form.cleaned_data)
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        print("Invalid data:", form.data)
-        print("Errors:", form.errors)
-        return super().form_invalid(form)   
 
 
 class CashFlowDeleteView(DeleteView):

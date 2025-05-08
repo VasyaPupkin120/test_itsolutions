@@ -52,7 +52,7 @@ class TypeFlow(models.Model):
 class CashFlow(models.Model):
     amount = models.DecimalField(max_digits=30, decimal_places=2, verbose_name="Сумма")
     comment = models.TextField(null=True, blank=True, verbose_name="Комментарий")
-    created_at = models.DateTimeField(editable=True, verbose_name="Дата движения")
+    created_at = models.DateField(editable=True, verbose_name="Дата движения")
     typeflow = models.ForeignKey('TypeFlow', on_delete=models.PROTECT, related_name="cashflows", verbose_name="Тип движения")
     category = models.ForeignKey('Category', on_delete=models.PROTECT, related_name="cashflows", verbose_name="Категория")
     subcategory = models.ForeignKey('Subcategory', on_delete=models.PROTECT, related_name="cashflows", verbose_name="Подкатегория")

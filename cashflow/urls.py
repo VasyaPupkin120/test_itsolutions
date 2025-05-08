@@ -21,8 +21,8 @@ app_name = 'cashflow'
 
 urlpatterns = [
     path('', views.CashflowListView.as_view(), name="cashflowlist"),
-    path('createflow/', views.createflow, name="createflow"),
-    # path('updateflow/<int:pk>/', views.updateflow, name="updateflow"),
+    # path('createflow/', views.createflow, name="createflow"),
+    path('createflow/', views.CashFlowCreateView.as_view(), name="createflow"),
     path('updateflow/<int:pk>/', views.CashFlowUpdateView.as_view(), name="updateflow"),
     path('deleteflow/<int:pk>/', views.CashFlowDeleteView.as_view(), name="deleteflow"),
     path('refrencedata/', views.refrence_data, name="refrence_data"),
