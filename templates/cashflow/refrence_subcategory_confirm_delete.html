@@ -1,0 +1,16 @@
+{% extends 'cashflow/_base.html' %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {% if related_objects %}
+        <p>Невозможно удалить подкатегорию {{ subcategory.name }}. Имеются связанные записи движения денежных средства:</p>
+        {% for cashflow in related_objects %}
+            <p>{{ cashflow.amount }} ₽, {{ cashflow.created_at }}</p>
+        {% endfor %}
+    {% else %}
+        <p>Удалить подкатегорию {{ subcategory.name }}?</p>
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    {% endif %}
+    <a href="{{ view.success_url }}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock content %}

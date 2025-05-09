@@ -40,8 +40,7 @@ function fillSelect(selectElement, items) {
         option.value = id;
         option.textContent = name;
         selectElement.appendChild(option);
-    }
-}
+    } }
 
 
 // ======= Управление формой создания, редактирования записи и фильтрации списка ДДС =======

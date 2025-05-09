@@ -2,11 +2,10 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.http import HttpRequest, JsonResponse
-from django.db.models import Q, Subquery
+from django.db.models import Q
 from django.http import JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib import messages
+from django.db.models.deletion import ProtectedError
 
 from .models import CashFlow, Category, StatusFlow, Subcategory, TypeFlow, StatusFlow
 from .forms import CategoryCreateUpdateForm, CreateUpdateCashFlowForm, FilterCashFlowForm, StatusflowCreateUpdateForm, SubcategoryCreateUpdateForm, TypeflowCreateUpdateForm
@@ -98,6 +97,9 @@ class CashFlowDeleteView(DeleteView):
 
 
 def refrence_data(request):
+    """
+    Страничка всех справочников.
+    """
     typeflows = TypeFlow.objects.all()
     categories = Category.objects.all()
     subcategories = Subcategory.objects.all()
@@ -110,6 +112,7 @@ def refrence_data(request):
     return render(request, 'cashflow/refrence_list.html', context)
 
 
+####################   создание записей справочников     ######################
 class RefrenceTypeflowCreateView(CreateView):
     model = TypeFlow
     form_class = TypeflowCreateUpdateForm
@@ -140,3 +143,117 @@ class RefrenceStatusflowCreateView(CreateView):
     template_name = 'cashflow/refrence_statusflow_create.html'
     success_url = reverse_lazy("cashflow:refrence-list")
     context_object_name = 'statusflow'
+
+
+####################   удаление записей справочников     ######################
+class RefrenceTypeflowDeleteView(DeleteView):
+    model = TypeFlow
+    template_name = 'cashflow/refrence_typeflow_confirm_delete.html'
+    success_url = reverse_lazy('cashflow:refrence-list')
+    context_object_name = 'typeflow'
+
+    # не хочу определять целый __init__ для только одной вспомогательной перменной
+    related_objects = None
+
+    def get(self, request, *args, **kwargs):
+        """
+        Нужно проинформировать об списке связанных записей до нажатия кнопки подтверждения удаления.
+        """
+        typeflow = self.get_object()
+        if related_objects := typeflow.categories.all():
+            self.related_objects = related_objects
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        """
+        Для информирования об наличии связанных записей
+        """
+        context = super().get_context_data(**kwargs)
+        if self.related_objects:
+            context['related_objects'] = self.related_objects
+        return context
+
+
+class RefrenceCategoryDeleteView(DeleteView):
+    model = Category
+    template_name = 'cashflow/refrence_category_confirm_delete.html'
+    success_url = reverse_lazy('cashflow:refrence-list')
+    context_object_name = 'category'
+
+    related_objects = None
+
+
+    def get(self, request, *args, **kwargs):
+        """
+        Нужно проинформировать об списке связанных записей до нажатия кнопки подтверждения удаления.
+        """
+        category = self.get_object()
+        if related_objects := category.subcategories.all():
+            self.related_objects = related_objects
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        """
+        Для информирования об наличии связанных записей
+        """
+        context = super().get_context_data(**kwargs)
+        if self.related_objects:
+            context['related_objects'] = self.related_objects
+        return context
+
+
+class RefrenceSubcategoryDeleteView(DeleteView):
+    model = Subcategory
+    template_name = 'cashflow/refrence_subcategory_confirm_delete.html'
+    success_url = reverse_lazy('cashflow:refrence-list')
+    context_object_name = 'subcategory'
+    
+    related_objects = None
+
+    def get(self, request, *args, **kwargs):
+        """
+        Нужно проинформировать об списке связанных записей до нажатия кнопки подтверждения удаления.
+        """
+        subcategory = self.get_object()
+        if related_objects := subcategory.cashflows.all():
+            self.related_objects = related_objects
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        """
+        Для информирования об наличии связанных записей
+        """
+        context = super().get_context_data(**kwargs)
+        if self.related_objects:
+            context['related_objects'] = self.related_objects
+        return context
+
+
+class RefrenceStatusflowDeleteView(DeleteView):
+    model = StatusFlow
+    template_name = 'cashflow/refrence_statusflow_confirm_delete.html'
+    success_url = reverse_lazy('cashflow:refrence-list')
+    context_object_name = 'statusflow'
+
+    related_objects = None
+
+    def get(self, request, *args, **kwargs):
+        """
+        Нужно проинформировать об списке связанных записей до нажатия кнопки подтверждения удаления.
+        """
+        statusflow = self.get_object()
+        if related_objects := statusflow.cashflows.all():
+            self.related_objects = related_objects
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        """
+        Для информирования об наличии связанных записей
+        """
+        context = super().get_context_data(**kwargs)
+        if self.related_objects:
+            context['related_objects'] = self.related_objects
+        return context
+
+
+##################   редактирование записей справочников    ###################

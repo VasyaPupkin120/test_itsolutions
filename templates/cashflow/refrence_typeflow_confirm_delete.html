@@ -1,0 +1,16 @@
+{% extends 'cashflow/_base.html' %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {% if related_objects %}
+        <p>Невозможно удалить движение {{ typeflow.name }}. Имеются связанные категории:</p>
+        {% for category in related_objects %}
+            <p>{{ category.name }}</p>
+        {% endfor %}
+    {% else %}
+        <p>Удалить тип движения {{ typeflow.name }}?</p>
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    {% endif %}
+    <a href="{{ view.success_url }}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock content %}
