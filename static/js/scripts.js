@@ -1,7 +1,7 @@
 // ajax-запрос структуры типов, категорий, подкатегорий, статусов
 async function getStructureData() {
   try {
-    const response = await fetch('/api/structure-data/');
+    const response = await fetch('/api/get-structure-data/');
     if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
     return await response.json();
   } catch (error) {

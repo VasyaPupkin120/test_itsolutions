@@ -1,0 +1,14 @@
+{% extends 'cashflow/_base.html' %}
+
+{% block title %}Редактировать статус{% endblock %}
+
+{% block page_title %}Редактировать статус{% endblock %}
+{% block content %}
+    <br>
+    <form id="form-update-refrence-statusflow" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="{{ view.success_url }}" class="btn btn-secondary">Отменить все</a>
+    </form>
+{% endblock %}

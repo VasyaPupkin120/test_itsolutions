@@ -11,7 +11,7 @@ from .models import CashFlow, Category, StatusFlow, Subcategory, TypeFlow, Statu
 from .forms import CategoryCreateUpdateForm, CreateUpdateCashFlowForm, FilterCashFlowForm, StatusflowCreateUpdateForm, SubcategoryCreateUpdateForm, TypeflowCreateUpdateForm
 
 
-def ajax_get_structure_data(request):
+def api_get_structure_data(request):
     """
     ajax-запрос структуры типов, категорий, подкатегорий, статусов
     """
@@ -257,3 +257,33 @@ class RefrenceStatusflowDeleteView(DeleteView):
 
 
 ##################   редактирование записей справочников    ###################
+class RefrenceTypeflowUpdateView(UpdateView):
+    model = TypeFlow
+    form_class = TypeflowCreateUpdateForm
+    template_name = 'cashflow/refrence_typeflow_update.html'
+    success_url = reverse_lazy('cashflow:refrence-list')
+    context_object_name = 'typeflow'
+
+
+class RefrenceCategoryUpdateView(UpdateView):
+    model = Category
+    form_class = CategoryCreateUpdateForm
+    template_name = 'cashflow/refrence_category_update.html'
+    success_url = reverse_lazy('cashflow:refrence-list')
+    context_object_name = 'category'
+
+
+class RefrenceSubcategoryUpdateView(UpdateView):
+    model = Subcategory
+    form_class = SubcategoryCreateUpdateForm
+    template_name = 'cashflow/refrence_subcategory_update.html'
+    success_url = reverse_lazy('cashflow:refrence-list')
+    context_object_name = 'subcategory'
+
+
+class RefrenceStatusflowUpdateView(UpdateView):
+    model = StatusFlow
+    form_class = StatusflowCreateUpdateForm
+    template_name = 'cashflow/refrence_statusflow_update.html'
+    success_url = reverse_lazy('cashflow:refrence-list')
+    context_object_name = 'statusflow'
