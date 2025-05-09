@@ -7,7 +7,7 @@ class CreateUpdateCashFlowForm(forms.ModelForm):
     Форма для создания и редактирования записи ДДС
     """
     created_at = forms.DateField(
-        # вынужден указать здесь поле и параметр required чтобы браузер не требовал его заполнения
+        # вынужден указать здесь поле created_at и параметр required чтобы браузер не требовал его заполнения
         required=False,
         label='Дата движения',
         widget=forms.DateInput(
@@ -171,21 +171,75 @@ class TypeflowCreateUpdateForm(forms.ModelForm):
     class Meta:
         model = TypeFlow
         fields = ['name',]
+        widgets = {
+            'name': forms.Textarea(attrs={
+                'class': 'form-control',
+                'id': 'name',
+                'rows': 1,
+                'required': True,
+            }),
+        }
+        labels = {'name': 'Название нового типа',}
+        
 
 
 class CategoryCreateUpdateForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name', 'typeflow']
-    
+        widgets = {
+            'name': forms.Textarea(attrs={
+                'class': 'form-control',
+                'id': 'category',
+                'rows': 1,
+                'required': True,
+            }),
+            'typeflow': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'typeflow',
+                'required': True,
+            })
+        }
+        labels = {
+                'name': 'Название новой категории',
+                'typflow': 'Выберите тип',
+                }
 
 class SubcategoryCreateUpdateForm(forms.ModelForm):
     class Meta:
         model = Subcategory
         fields = ['name', 'supercategory']
+        widgets = {
+            'name': forms.Textarea(attrs={
+                'class': 'form-control',
+                'id': 'subcategory',
+                'rows': 1,
+                'required': True,
+            }),
+            'supercategory': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'category',
+                'required': True,
+            })
+        }
+        labels = {
+            'name': "Название новой подкатегории",
+            'supercategory': 'Выберите категорию',
+            }
 
 
 class StatusflowCreateUpdateForm(forms.ModelForm):
     class Meta:
         model = StatusFlow
         fields = ['name', ]
+        widgets = {
+                'name': forms.Textarea(attrs={
+                    'class': 'form-control',
+                    'id': 'name',
+                    'rows': 1,
+                    'required': True,
+                })
+        }
+        labels = {
+                'name': 'Назавние нового статуса:'
+                }
