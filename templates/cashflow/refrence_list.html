@@ -5,34 +5,103 @@
 {% block page_title %}Просмотреть или создать справочники{% endblock %}
 
 {% block content %}
-    <div class="alert alert-info">
-        <p>Списки справочников и ссылки на странички создания этих справочников</p>
-    </div>
-    <hr>
+    <br>
     <h2>Типы движений</h2>
-    {% for typeflow in typeflows %}
-        <h5>{{ typeflow.name }}</h5>
-    {% endfor %}
+        <table class="table table-striped table-hover table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Тип</th>
+                    <th class='text-right'></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for typeflow in typeflows %}
+                    <tr>
+                        <td><a href="{% url 'cashflow:refrence-typeflow-update' typeflow.pk %}" class="btn btn-sm btn-link text-primary" title="Редактировать">✎ </a></td>
+                        <td>{{ typeflow.name }}</td>
+                        <td class='text-right'><a href="{% url 'cashflow:refrence-typeflow-delete' typeflow.pk %}" class="btn btn-sm btn-link text-primary" title="Удалить">🗑</a></td>
+                    </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
     <a href="{% url 'cashflow:refrence-typeflow-create'%}" class="btn btn-primary">Добавить тип</a>
     <br>
     <hr>
+    <br>
     <h2>Категории</h2>
-    {% for category in categories %}
-        <h5>{{ category.name }}</h5>
-    {% endfor %}
+        <table class="table table-striped table-hover table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Категория</th>
+                    <th>Принадлежит типу</th>
+                    <th class='text-right'></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td><a href="{% url 'cashflow:refrence-category-update' category.pk %}" class="btn btn-sm btn-link text-primary" title="Редактировать">✎ </a></td>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.typeflow.name }}</td>
+                        <td class='text-right'><a href="{% url 'cashflow:refrence-category-delete' category.pk %}" class="btn btn-sm btn-link text-primary" title="Удалить">🗑</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     <a href="{% url 'cashflow:refrence-category-create'%}" class="btn btn-primary">Добавить категорию</a>
     <br>
     <hr>
+    <br>
     <h2>Подкатегории</h2>
-    {% for subcategory in subcategories %}
-        <h5>{{ subcategory.name }}</h5>
-    {% endfor %}
+        <table class="table table-striped table-hover table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Подкатегория</th>
+                    <th>Принадлежит категории</th>
+                    <th class='text-right'></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subcategory in subcategories %}
+                    <tr>
+                        <td><a href="{% url 'cashflow:refrence-subcategory-update' subcategory.pk %}" class="btn btn-sm btn-link text-primary" title="Редактировать">✎ </a></td>
+                        <td>{{ subcategory.name }}</td>
+                        <td>{{ subcategory.supercategory.name }}</td>
+                        <td class='text-right'><a href="{% url 'cashflow:refrence-subcategory-delete' subcategory.pk %}" class="btn btn-sm btn-link text-primary" title="Удалить">🗑</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     <a href="{% url 'cashflow:refrence-subcategory-create'%}" class="btn btn-primary">Добавить подкатегорию</a>
     <br>
     <hr>
+    <br>
     <h2>Статусы</h2>
-    {% for status in statuses %}
-        <h5>{{ status.name }}</h5>
-    {% endfor %}
+        <table class="table table-striped table-hover table-sm">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Тип</th>
+                    <th class='text-right'></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for statusflow in statuses %}
+                    <tr>
+                        <td><a href="{% url 'cashflow:refrence-statusflow-update' statusflow.pk %}" class="btn btn-sm btn-link text-primary" title="Редактировать">✎ </a></td>
+                        <td>{{ statusflow.name }}</td>
+                        <td class='text-right'><a href="{% url 'cashflow:refrence-statusflow-delete' statusflow.pk %}" class="btn btn-sm btn-link text-primary" title="Удалить">🗑</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     <a href="{% url 'cashflow:refrence-statusflow-create'%}" class="btn btn-primary">Добавить статус</a>
+    <hr>
+    <br>
+    <br>
+    <br>
 {% endblock %}

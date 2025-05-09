@@ -109,6 +109,7 @@ def refrence_data(request):
                }
     return render(request, 'cashflow/refrence_list.html', context)
 
+
 class RefrenceTypeflowCreateView(CreateView):
     model = TypeFlow
     form_class = TypeflowCreateUpdateForm
